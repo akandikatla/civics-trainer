@@ -1,0 +1,16 @@
+{
+  "note": "Answers the USCIS PDF cannot print directly, filled in for a Minnesota resident at ZIP 55347 (Eden Prairie, Minnesota's 3rd congressional district). Values are as of October 2026. The November 3, 2026 election may change the governor and one U.S. Senate seat (Tina Smith is not seeking reelection), and officeholders can change at any time, so verify every answer listed in verifyBeforeInterview at uscis.gov/citizenship/testupdates and with current Minnesota sources before the interview.",
+  "state": "Minnesota",
+  "zip": "55347",
+  "verifyBeforeInterview": [23, 29, 30, 38, 39, 57, 61],
+  "answers": {
+    "23": ["Amy Klobuchar", "Klobuchar", "Tina Smith", "Smith"],
+    "29": ["Kelly Morrison", "Morrison"],
+    "30": ["Mike Johnson", "Johnson"],
+    "38": ["Donald Trump", "Trump", "Donald J. Trump"],
+    "39": ["JD Vance", "Vance", "J.D. Vance"],
+    "57": ["John Roberts", "Roberts", "John G. Roberts, Jr."],
+    "61": ["Tim Walz", "Walz"],
+    "62": ["Saint Paul", "St. Paul"]
+  }
+}

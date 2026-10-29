@@ -1,24 +1,33 @@
 {
-  "name": "civics-trainer",
+  "name": "civics-trainer-dad",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "bundle-audio": "node scripts/bundle-audio.mjs",
+    "prebuild": "node scripts/bundle-audio.mjs && node scripts/copy-ort.mjs",
+    "build": "next build && node -e \"require('fs').writeFileSync('out/.nojekyll','')\"",
+    "serve": "npx serve out",
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "eval:pipelines": "tsx eval/pipelines.ts",
+    "predev": "node scripts/copy-ort.mjs"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.35"
+    "@huggingface/transformers": "3.8.1",
+    "next": "^16.3.4",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "postcss": "8.5.28",
+    "tailwindcss": "^3.4.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "vitest": "^4.1.11"
   }
 }

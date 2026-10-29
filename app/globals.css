@@ -2,26 +2,130 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Design tokens.
+ *
+ * The concept: the question is a document, the interface is the machine reading
+ * it. So the question wears a serif in paper white and everything else wears a
+ * monospace in phosphor. That split is the whole hierarchy: exactly one thing on
+ * screen is the content, and it is the only thing set in paper white.
+ *
+ * The three status colours were chosen by running the palette validator, not by
+ * eye. An earlier dim-green/red pair measured ΔE 2.0 under protanopia, meaning a
+ * red-blind reader could not tell "you missed this" from "not seen yet". These
+ * three clear ΔE 8.5, and every state also carries a distinct cell shape so the
+ * grid never depends on colour alone.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --void: #000000;
+  --plate: #f2efe6;
+  --ink: #8a8a82;
+  --ink-faint: #43433d;
+  --rule: #1f1f1c;
+
+  /* Bright green speaks: verdicts, counts, the live cursor. */
+  --mastered: #2fbf74;
+  /*
+   * Quiet green fills the status grid. Once 126 of 128 are done, a field of bright
+   * green is a wall that hides the two cells that still need work. Resolved state
+   * should recede and unresolved state should pull the eye, so the grid's "locked
+   * in" fill is deliberately dim and only the unfinished states stay bright.
+   */
+  --mastered-quiet: #1b6b43;
+  --confirm: #d69a24;
+  --lapsed: #dc5049;
+
+  --serif: "Iowan Old Style", Charter, Georgia, "Times New Roman", serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--void);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-feature-settings: "tnum" 1;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+/* The document voice. Paper white, serif, and the only large type on the page. */
+.question-plate {
+  font-family: var(--serif);
+  color: var(--plate);
+  font-size: clamp(1.5rem, 4.2vw, 2.5rem);
+  line-height: 1.18;
+  letter-spacing: -0.011em;
+  text-wrap: balance;
+}
+
+/*
+ * Phosphor bloom. A CRT does not render a hairline glyph, it excites a dot that
+ * spills light. One shadow, only on live status text, is enough to read as a tube
+ * without a scanline overlay (the accessory removed on the last pass).
+ */
+.bloom {
+  text-shadow: 0 0 10px currentColor;
+}
+
+.rule {
+  border-color: var(--rule);
+}
+
+/* One orchestrated moment: a cell blooming the instant a question is mastered. */
+@keyframes lock-in {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--mastered);
   }
+  40% {
+    transform: scale(1.55);
+    box-shadow: 0 0 12px 3px var(--mastered);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.lock-in {
+  animation: lock-in 620ms ease-out;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.breathe {
+  animation: breathe 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lock-in,
+  .breathe {
+    animation: none;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--plate);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--mastered);
+  color: var(--void);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-faint) transparent;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--ink-faint);
 }
